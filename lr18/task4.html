@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Случайный фон</title>
+</head>
+<body>
+    <button id="randomBgBtn">Случайный фон</button>
+    <p>Нажми на кнопку, чтобы изменить цвет фона</p>
+
+    <script>
+        document.querySelector("#randomBgBtn").onclick = function() {
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            document.body.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+        };
+    </script>
+</body>
+</html>

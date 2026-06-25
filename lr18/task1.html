@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Приветствие</title>
+</head>
+<body>
+    <input type="text" id="nameInput" placeholder="Введите ваше имя">
+    <button id="greetBtn">Сказать привет</button>
+    <p id="out"></p>
+
+    <script>
+        let nameInput = document.querySelector("#nameInput");
+        let greetBtn = document.querySelector("#greetBtn");
+        let output = document.querySelector("#out");
+
+        greetBtn.onclick = function() {
+            let name = nameInput.value;
+            if (name === "") {
+                output.textContent = "Вы не ввели имя";
+            } else {
+                output.textContent = "Привет, " + name + "! Добро пожаловать на сайт";
+            }
+        };
+    </script>
+</body>
+</html>

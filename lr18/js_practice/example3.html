@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Задание В</title>
+</head>
+<body>
+    <p id="p">Нажми на кнопку</p>
+    <button id="changeBtn">Нажми меня</button>
+
+    <script>
+        let paragraph = document.querySelector("#p");
+        let button = document.querySelector("#changeBtn");
+
+        button.onclick = function() {
+            paragraph.textContent = "Клик сработал!";
+            paragraph.style.color = "blue";
+        };
+    </script>
+</body>
+</html>
