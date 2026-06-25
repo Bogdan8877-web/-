@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор ИМТ</title>
+    <style>
+        input, button { padding: 8px; margin: 5px; }
+        .result-box {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .error { color: red; font-weight: bold; }
+        .bmi-value { font-size: 24px; font-weight: bold; }
+        .bmi-comment { font-size: 20px; margin: 10px 0; }
+        .bmi-recommendation { margin-top: 10px; }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <h2>Калькулятор ИМТ (Индекс массы тела)</h2>
+    
+    <input type="number" id="heightInput" placeholder="Рост (см)" min="50" max="250">
+    <input type="number" id="weightInput" placeholder="Вес (кг)" min="10" max="300">
+    <button id="calculateBtn">Рассчитать ИМТ</button>
+    
+    <div id="resultBox" class="result-box">
+        <p class="bmi-value" id="bmiValue">ИМТ: --</p>
+        <p class="bmi-comment" id="bmiComment">Комментарий: --</p>
+        <p class="bmi-recommendation" id="bmiRecommendation">Рекомендация: --</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="bmiProgress" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <script>
+        let heightInput = document.querySelector("#heightInput");
+        let weightInput = document.querySelector("#weightInput");
+        let calculateBtn = document.querySelector("#calculateBtn");
+        
+        let bmiValue = document.querySelector("#bmiValue");
+        let bmiComment = document.querySelector("#bmiComment");
+        let bmiRecommendation = document.querySelector("#bmiRecommendation");
+        let bmiProgress = document.querySelector("#bmiProgress");
+        let resultBox = document.querySelector("#resultBox");
+
+        function getBMICategory(imt) {
+            if (imt < 16) {
+                return {
+                    comment: "Выраженный дефицит массы тела",
+                    color: "red",
+                    recommendation: "Рекомендуется сбалансированное питание с повышенной калорийностью",
+                    progress: 10
+                };
+            } else if (imt < 18.5) {
+                return {
+                    comment: "Недостаточная масса тела",
+                    color: "orange",
+                    recommendation: "Рекомендуется сбалансированное питание с повышенной калорийностью",
+                    progress: 25
+                };
+            } else if (imt < 25) {
+                return {
+                    comment: "Нормальная масса тела",
+                    color: "green",
+                    recommendation: "Отличный результат! Поддерживайте здоровый образ жизни",
+                    progress: 50
+                };
+            } else if (imt < 30) {
+                return {
+                    comment: "Избыточная масса тела (предожирение)",
+                    color: "orange",
+                    recommendation: "Рекомендуется увеличить физическую активность и скорректировать питание",
+                    progress: 70
+                };
+            } else if (imt < 35) {
+                return {
+                    comment: "Ожирение I степени",
+                    color: "red",
+                    recommendation: "Рекомендуется консультация врача-диетолога",
+                    progress: 85
+                };
+            } else if (imt < 40) {
+                return {
+                    comment: "Ожирение II степени",
+                    color: "darkred",
+                    recommendation: "Рекомендуется консультация врача-диетолога",
+                    progress: 95
+                };
+            } else {
+                return {
+                    comment: "Ожирение III степени",
+                    color: "#8B0000",
+                    recommendation: "Срочно обратитесь к врачу-диетологу",
+                    progress: 100
+                };
+            }
+        }
+
+        calculateBtn.onclick = function() {
+            if (heightInput.value === "" || weightInput.value === "") {
+                showError("Заполните все поля!");
+                return;
+            }
+
+            let height = Number(heightInput.value);
+            let weight = Number(weightInput.value);
+
+            if (height < 50 || height > 250) {
+                showError("Рост должен быть от 50 до 250 см!");
+                return;
+            }
+            
+            if (weight < 10 || weight > 300) {
+                showError("Вес должен быть от 10 до 300 кг!");
+                return;
+            }
+
+            let heightM = height / 100;
+            let imt = weight / (heightM * heightM);
+            let imtRounded = imt.toFixed(2);
+
+            let category = getBMICategory(imt);
+
+            bmiValue.textContent = "ИМТ: " + imtRounded;
+            bmiValue.style.color = category.color;
+            
+            bmiComment.textContent = "Комментарий: " + category.comment;
+            bmiComment.style.color = category.color;
+            
+            bmiRecommendation.textContent = "Рекомендация: " + category.recommendation;
+            bmiRecommendation.style.color = category.color;
+
+            bmiProgress.style.width = category.progress + "%";
+            bmiProgress.style.backgroundColor = category.color;
+
+            resultBox.style.backgroundColor = category.color + "22"; // 22 = прозрачность
+            resultBox.style.borderColor = category.color;
+
+            resultBox.style.display = "block";
+        };
+
+        function showError(message) {
+            alert("Ошибка: " + message);
+            resultBox.style.display = "none";
+        }
+
+        resultBox.style.display = "none";
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор чаевых</title>
+    <style>
+        .result { color: green; margin: 10px 0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Калькулятор чаевых</h2>
+    <input type="number" id="billInput" placeholder="Сумма счёта" step="0.01">
+    <input type="number" id="tipPercentInput" placeholder="Процент чаевых (0-50)" min="0" max="50">
+    <input type="number" id="peopleInput" placeholder="Количество человек" min="1" value="1">
+    <button id="calculateBtn">Рассчитать</button>
+    
+    <p id="tipResult"></p>
+    <p id="totalResult"></p>
+    <p id="perPersonResult"></p>
+
+    <script>
+        let billInput = document.querySelector("#billInput");
+        let tipPercentInput = document.querySelector("#tipPercentInput");
+        let peopleInput = document.querySelector("#peopleInput");
+        let calculateBtn = document.querySelector("#calculateBtn");
+        
+        let tipResult = document.querySelector("#tipResult");
+        let totalResult = document.querySelector("#totalResult");
+        let perPersonResult = document.querySelector("#perPersonResult");
+
+        function clearResults() {
+            tipResult.textContent = "";
+            totalResult.textContent = "";
+            perPersonResult.textContent = "";
+            tipResult.className = "";
+            totalResult.className = "";
+            perPersonResult.className = "";
+        }
+
+        calculateBtn.onclick = function() {
+            clearResults();
+
+            if (billInput.value === "" || tipPercentInput.value === "" || peopleInput.value === "") {
+                showError("Заполните все поля!");
+                return;
+            }
+
+            let bill = Number(billInput.value);
+            let tipPercent = Number(tipPercentInput.value);
+            let people = Number(peopleInput.value);
+
+            // Проверка значений
+            if (bill < 0) {
+                showError("Сумма счёта не может быть отрицательной!");
+                return;
+            }
+            
+            if (tipPercent < 0 || tipPercent > 50) {
+                showError("Процент чаевых должен быть от 0 до 50!");
+                return;
+            }
+            
+            if (people < 1) {
+                showError("Количество человек должно быть не менее 1!");
+                return;
+            }
+
+            let tipAmount = bill * (tipPercent / 100);
+            let totalAmount = bill + tipAmount;
+            let perPerson = totalAmount / people;
+
+            tipAmount = Math.round(tipAmount * 100) / 100;
+            totalAmount = Math.round(totalAmount * 100) / 100;
+            perPerson = Math.round(perPerson * 100) / 100;
+
+            tipResult.textContent = "Сумма чаевых: " + tipAmount + " рублей";
+            tipResult.className = "result";
+            
+            totalResult.textContent = "Общая сумма: " + totalAmount + " рублей";
+            totalResult.className = "result";
+            
+            if (people === 1) {
+                perPersonResult.textContent = "Каждый должен заплатить: " + perPerson + " рублей (1 человек)";
+            } else {
+                perPersonResult.textContent = "Каждый должен заплатить по " + perPerson + " рублей (" + people + " человек)";
+            }
+            perPersonResult.className = "result";
+        };
+
+        function showError(message) {
+            let error = document.createElement("p");
+            error.textContent = "Ошибка: " + message;
+            error.className = "error";
+            document.body.appendChild(error);
+            setTimeout(() => error.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

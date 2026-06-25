@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор скидки</title>
+    <style>
+        .error { color: red; }
+        .result { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Калькулятор скидки</h2>
+    <input type="number" id="priceInput" placeholder="Стоимость товара">
+    <input type="number" id="ageInput" placeholder="Возраст покупателя">
+    <button id="calculateBtn">Рассчитать</button>
+    <p id="resultOutput"></p>
+
+    <script>
+        let priceInput = document.querySelector("#priceInput");
+        let ageInput = document.querySelector("#ageInput");
+        let calculateBtn = document.querySelector("#calculateBtn");
+        let output = document.querySelector("#resultOutput");
+
+        function calculateDiscount(age) {
+            if (age < 18) return 10;
+            if (age >= 60) return 20;
+            return 0;
+        }
+
+        calculateBtn.onclick = function() {
+            let price = Number(priceInput.value);
+            let age = Number(ageInput.value);
+
+            if (priceInput.value === "" || ageInput.value === "") {
+                output.textContent = "Ошибка: заполните все поля!";
+                output.className = "error";
+                return;
+            }
+
+            if (price < 0 || age < 0) {
+                output.textContent = "Ошибка: значения не могут быть отрицательными!";
+                output.className = "error";
+                return;
+            }
+
+            let discount = calculateDiscount(age);
+            let finalPrice = price - (price * discount / 100);
+
+            output.className = "result";
+            if (discount > 0) {
+                output.textContent = "Итоговая цена: " + finalPrice + " рублей (скидка " + discount + "%)";
+            } else {
+                output.textContent = "Итоговая цена: " + finalPrice + " рублей (скидка не предоставлена)";
+            }
+        };
+    </script>
+</body>
+</html>

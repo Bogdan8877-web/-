@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка номера телефона</title>
+    <style>
+        .valid { color: green; font-weight: bold; }
+        .invalid { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Проверка номера телефона</h2>
+    <input type="tel" id="phoneInput" placeholder="Введите номер телефона">
+    <button id="checkBtn">Проверить номер</button>
+    <p id="resultOutput"></p>
+
+    <script>
+        let phoneInput = document.querySelector("#phoneInput");
+        let checkBtn = document.querySelector("#checkBtn");
+        let output = document.querySelector("#resultOutput");
+
+        checkBtn.onclick = function() {
+            let phone = phoneInput.value.trim();
+            output.className = "";
+
+            // Проверка на пустоту
+            if (phone === "") {
+                output.textContent = "Ошибка: номер не введён";
+                output.className = "invalid";
+                return;
+            }
+
+            let cleaned = phone;
+            let hasPlus = false;
+            if (cleaned[0] === "+") {
+                hasPlus = true;
+                cleaned = cleaned.slice(1);
+            }
+
+            for (let i = 0; i < cleaned.length; i++) {
+                if (cleaned[i] < "0" || cleaned[i] > "9") {
+                    output.textContent = "Ошибка: номер содержит недопустимые символы";
+                    output.className = "invalid";
+                    return;
+                }
+            }
+
+            let length = cleaned.length;
+            let isValid = false;
+
+            if (hasPlus && length === 11 && cleaned[0] === "7") {
+                isValid = true; // +7XXXXXXXXXX
+            } else if (!hasPlus && length === 11 && cleaned[0] === "8") {
+                isValid = true; // 8XXXXXXXXXX
+            } else if (!hasPlus && length === 10) {
+                isValid = true; // XXXXXXXXXX
+            }
+
+            if (isValid) {
+                output.textContent = "Номер телефона верный";
+                output.className = "valid";
+            } else {
+                let errorMsg = "Ошибка: неверный формат номера. ";
+                if (hasPlus) {
+                    errorMsg += "Ожидается +7 и 10 цифр после";
+                } else if (length === 11 && cleaned[0] !== "8") {
+                    errorMsg += "После 8 должно быть 10 цифр";
+                } else {
+                    errorMsg += "Допустимые форматы: +7XXXXXXXXXX, 8XXXXXXXXXX или XXXXXXXXXX";
+                }
+                output.textContent = errorMsg;
+                output.className = "invalid";
+            }
+        };
+    </script>
+</body>
+</html>
