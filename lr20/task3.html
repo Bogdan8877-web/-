@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Счётчик элементов</title>
+</head>
+<body>
+    <h2>Анализ массива чисел</h2>
+    <p><strong>Массив:</strong> [5, 12, 8, 130, 44, 3, 7, 21]</p>
+    <button id="countBtn">Подсчитать</button>
+    <div id="resultOutput"></div>
+
+    <script>
+        let numbers = [5, 12, 8, 130, 44, 3, 7, 21];
+        let countBtn = document.querySelector("#countBtn");
+        let output = document.querySelector("#resultOutput");
+
+        countBtn.onclick = function() {
+            let greater = 0;  
+            let less = 0;     
+            let equal = 0;   
+            let sum = 0;
+
+            for (let i = 0; i < numbers.length; i++) {
+                let num = numbers[i];
+                sum += num;
+
+                if (num > 10) {
+                    greater++;
+                } else if (num < 10) {
+                    less++;
+                } else {
+                    equal++;
+                }
+            }
+
+            let html = `
+                <div class="result">
+                    <p><span class="highlight">Чисел больше 10:</span> ${greater}</p>
+                    <p><span class="highlight">Чисел меньше 10:</span> ${less}</p>
+                    <p><span class="highlight">Чисел равных 10:</span> ${equal}</p>
+                    <p><span class="highlight">Сумма всех элементов:</span> ${sum}</p>
+                    <p><span class="highlight">Среднее арифметическое:</span> ${(sum / numbers.length).toFixed(2)}</p>
+                </div>
+            `;
+            output.innerHTML = html;
+        };
+    </script>
+</body>
+</html>

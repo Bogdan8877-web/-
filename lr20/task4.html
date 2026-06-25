@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do список</title>
+</head>
+<body>
+    <input type="text" id="taskInput" placeholder="Новое дело...">
+    <button id="addTaskBtn">Добавить</button>
+    <button id="clearAllBtn">Очистить все</button>
+    <p id="counter">Всего дел: 0</p>
+    <ul id="taskList"></ul>
+    <p id="errorMsg" style="color: red;"></p>
+
+    <script>
+        let taskInput = document.querySelector("#taskInput");
+        let addBtn = document.querySelector("#addTaskBtn");
+        let clearAllBtn = document.querySelector("#clearAllBtn");
+        let taskList = document.querySelector("#taskList");
+        let counter = document.querySelector("#counter");
+        let errorMsg = document.querySelector("#errorMsg");
+
+        function createTaskItem(taskText) {
+            let li = document.createElement("li");
+            li.textContent = taskText;
+            
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Удалить";
+            deleteBtn.onclick = function() {
+                li.remove();
+                updateCounter();
+            };
+            
+            li.appendChild(deleteBtn);
+            return li;
+        }
+
+        function updateCounter() {
+            let count = document.querySelectorAll("#taskList li").length;
+            counter.textContent = "Всего дел: " + count;
+        }
+
+        function addTask() {
+            let taskText = taskInput.value.trim();
+            
+            if (taskText === "") {
+                errorMsg.textContent = "Ошибка: введите текст дела!";
+                return;
+            }
+            
+            errorMsg.textContent = "";
+            let li = createTaskItem(taskText);
+            taskList.appendChild(li);
+            taskInput.value = "";
+            updateCounter();
+        }
+
+        addBtn.onclick = addTask;
+
+        taskInput.onkeypress = function(e) {
+            if (e.key === "Enter") {
+                addTask();
+            }
+        };
+
+        clearAllBtn.onclick = function() {
+            if (taskList.children.length === 0) {
+                errorMsg.textContent = "Список уже пуст!";
+                return;
+            }
+            
+            if (confirm("Удалить все дела?")) {
+                taskList.innerHTML = "";
+                updateCounter();
+                errorMsg.textContent = "";
+            }
+        };
+
+        // Добавляем примеры дел
+        let examples = ["Купить продукты", "Сделать домашнее задание", "Позвонить другу"];
+        examples.forEach(function(ex) {
+            let li = createTaskItem(ex);
+            taskList.appendChild(li);
+        });
+        updateCounter();
+    </script>
+</body>
+</html>

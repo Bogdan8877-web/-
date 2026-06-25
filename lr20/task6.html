@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Генератор случайных имён</title>
+</head>
+<body>
+    <h2>Генератор случайных имён</h2>
+    
+    <p id="nameDisplay">Нажмите кнопку</p>
+    
+    <button id="randomBtn">Случайное имя</button>
+    <button id="generateTenBtn">Сгенерировать 10 имён</button>
+    
+    <p id="counter">Сгенерировано имён: 0</p>
+
+    <script>
+        let names = ["Анна", "Петр", "Иван", "Мария", "Ольга", 
+                     "Дмитрий", "Елена", "Сергей", "Татьяна", "Алексей"];
+        
+        let surnames = ["Иванова", "Петров", "Сидоров", "Кузнецова", "Смирнов", 
+                        "Волкова", "Морозов", "Новикова", "Федоров", "Соколова"];
+        
+        let patronymics = ["Александровна", "Петрович", "Иванович", "Сергеевна", "Дмитриевна",
+                          "Алексеевич", "Владимировна", "Михайлович", "Николаевна", "Андреевич"];
+
+        let nameDisplay = document.querySelector("#nameDisplay");
+        let randomBtn = document.querySelector("#randomBtn");
+        let generateTenBtn = document.querySelector("#generateTenBtn");
+        let counter = document.querySelector("#counter");
+        
+        let generatedCount = 0;
+
+        function getRandomElement(arr) {
+            let randomIndex = Math.floor(Math.random() * arr.length);
+            return arr[randomIndex];
+        }
+
+        function generateFullName() {
+            let name = getRandomElement(names);
+            let surname = getRandomElement(surnames);
+            let patronymic = getRandomElement(patronymics);
+            return surname + " " + name + " " + patronymic;
+        }
+
+        function updateCounter() {
+            counter.textContent = "Сгенерировано имён: " + generatedCount;
+        }
+
+        randomBtn.onclick = function() {
+            let fullName = generateFullName();
+            nameDisplay.textContent = fullName;
+            generatedCount++;
+            updateCounter();
+        };
+
+        generateTenBtn.onclick = function() {
+            let result = "";
+            for (let i = 0; i < 10; i++) {
+                let fullName = generateFullName();
+                result += fullName;
+                if (i < 9) {
+                    result += "<br>";
+                }
+                generatedCount++;
+            }
+            nameDisplay.innerHTML = result;
+            updateCounter();
+        };
+
+        // Генерируем первое имя при загрузке
+        randomBtn.click();
+    </script>
+</body>
+</html>
